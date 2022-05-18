@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script defer crossorigin src="delete.js" type="module"></script>
+    <script defer crossorigin src="create.js" type="module"></script>
+    <script defer crossorigin src="read.js" type="module"></script>
+    <script defer crossorigin src="update.js" type="module"></script>
+    <script defer crossorigin src="find.js" type="module"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=David+Libre&family=Hurricane&family=Inter:wght@200&family=Maven+Pro&family=Montserrat:wght@300&family=Playfair+Display:ital@1&family=Press+Start+2P&family=Roboto:ital,wght@0,100;0,300;1,100&display=swap"
+      rel="stylesheet"
+    />
+    <link href="style.css" rel="stylesheet" />
+    <title>CRUD Application</title>
+  </head>
+  <body>
+    <div class="overlay hidden"></div>
+    <div id="loader" class="hidden"></div>
+
+    <!-- C R E A T E -->
+    <div class="crud__create--modal modal hidden">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="close__icon"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+
+      <form id="create_employee--form">
+        <div class="flex first__name--container">
+          <label for="first_name">First name</label>
+          <input
+            required
+            type="text"
+            placeholder="Enter employee's first name"
+            id="first_name"
+          />
+        </div>
+
+        <div class="flex last__name--container">
+          <label for="last_name">Last name</label>
+          <input
+            required
+            type="text"
+            placeholder="Enter employee's last name"
+            id="last_name"
+          />
+        </div>
+
+        <div class="flex salary--container">
+          <label for="salary">Salary</label>
+          <input
+            required
+            type="number"
+            step="0.01"
+            value="salary"
+            placeholder="Enter employee's salary"
+            id="salary"
+          />
+        </div>
+
+        <label>Gender</label>
+        <div class="radio__container">
+          <input type="radio" id="male" value="true" name="gender" required />
+
+          <label class="gender__radio" for="male">Male</label>
+        </div>
+        <div class="radio__container">
+          <input type="radio" id="female" value="false" name="gender" />
+          <label class="gender__radio" for="female">Female</label>
+        </div>
+
+        <button type="submit" class="crud__create--btn">Create employee</button>
+        <p class="create__message"></p>
+      </form>
+    </div>
+
+    <!-- C R E A T E -->
+
+    <!-- R E A D -->
+    <div class="modal crud__read--modal hidden">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="close__icon close__icon--read"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+      <p class="employee__list--title">Employee's list</p>
+      <p id="read__message"></p>
+      <!-- <div class="employee__row">
+        <p id="employee__data--firstName--lastName">Jan Kowalski</p>
+        <p id="employee__data--salary">9000$</p>
+        <p id="employee__data--gender">Male</p>
+      </div> -->
+      <p id="employees__data--number"></p>
+    </div>
+    <!-- R E A D -->
+
+    <!-- U P D A T E -->
+    <div class="modal crud__update--modal hidden">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="close__icon"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+      <p id="update__operation--title">Update employee</p>
+      <p id="update__operation--additional-info">
+        (If you don't want to change, stay as it is)
+      </p>
+
+      <form class="employee_data--container">
+        <label class="emp__data--label" for="emp__id"
+          >ID of searching employee</label
+        >
+        <input
+          type="number"
+          id="emp__id"
+          class="emp__data--input"
+          placeholder="Employee's ID"
+          required
+        />
+
+        <label class="emp__data--label" for="emp__first--name"
+          >New first name</label
+        >
+        <input
+          type="text"
+          id="emp__first--name"
+          class="emp__data--input"
+          placeholder="Enter first name"
+        />
+
+        <label class="emp__data--label" for="emp__last--name"
+          >New last name</label
+        >
+        <input
+          type="text"
+          id="emp__last--name"
+          class="emp__data--input"
+          placeholder="Enter last name"
+        />
+
+        <label class="emp__data--label" for="emp__salary">New salary</label>
+        <input
+          type="number"
+          step="0.01"
+          id="emp__salary"
+          class="emp__data--input"
+          placeholder="Enter salary"
+        />
+
+        <label id="gender__update--label">Gender</label>
+        <div class="radio__container">
+          <input type="radio" id="male__updating" value="true" name="gender" />
+
+          <label class="gender__radio" for="male__updating">Male</label>
+        </div>
+        <div class="radio__container">
+          <input
+            type="radio"
+            id="female__updating"
+            value="false"
+            name="gender"
+          />
+          <label class="gender__radio" for="female__updating">Female</label>
+        </div>
+
+        <button type="submit" id="submit--employee-change">Change</button>
+        <p class="update__message"></p>
+      </form>
+    </div>
+    <!-- U P D A T E -->
+
+    <!-- D E L E T E -->
+    <div class="modal crud__delete--modal hidden">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="close__icon"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+
+      <form class="searching__form">
+        <div class="searching__container">
+          <p class="searching__label">Search by id</p>
+          <input type="number" required id="searching__id" />
+          <button type="submit" class="search__icon--btn">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="search__icon"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </button>
+        </div>
+      </form>
+
+      <!-- <div class="employee__row">
+        <p id="employee__data-id">1.</p>
+        <p id="employee__data--firstName--lastName">Jan Kowalski</p>
+        <p id="employee__data--salary">9000$</p>
+        <p id="employee__data--gender">Male</p>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="delete__icon"
+          data-id="1"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+          />
+        </svg>
+      </div> -->
+    </div>
+    <!-- D E L E T E -->
+
+    <!-- F I N D -->
+    <div class="modal crud__find--modal hidden">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="close__icon"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+
+      <div class="upper_find">
+        <p class="choose__criterium">Choose criterium</p>
+        <select id="criterium" name="criterium">
+          <option value="firstName">First name</option>
+          <option value="lastName">Last name</option>
+          <option value="salary">Salary</option>
+        </select>
+      </div>
+
+      <form class="finding__form">
+        <div class="searching__container">
+          <p class="finding__label"></p>
+          <input type="text" required id="finding__input" />
+          <button type="submit" class="search__icon--btn">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="search__icon"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </button>
+        </div>
+      </form>
+      <div id="limit__container">
+        <p id="limit__label">Entery salary limit (+/-)</p>
+        <input type="number" step="0.01" id="limit" />
+      </div>
+
+      <!-- <div class="employee__row">
+        <p id="employee__data-id">1.</p>
+        <p id="employee__data--firstName--lastName">Jan Kowalski</p>
+        <p id="employee__data--salary">9000$</p>
+        <p id="employee__data--gender">Male</p>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="delete__icon"
+          data-id="1"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+          />
+        </svg>
+      </div> -->
+      <p class="user__found--error-message"></p>
+    </div>
+
+    <!-- F I N D -->
+    <section class="main__section">
+      <h1>C R U D F</h1>
+      <div class="flex__column curd__operations">
+        <div class="crud__operation create__operation">
+          <p>C</p>
+          <p>Create</p>
+        </div>
+
+        <div class="crud__operation read__operation">
+          <p>R</p>
+          <p>Read</p>
+        </div>
+
+        <div class="crud__operation update__operation">
+          <p>U</p>
+          <p>Update</p>
+        </div>
+
+        <div class="crud__operation delete__operation">
+          <p>D</p>
+          <p>Delete</p>
+        </div>
+
+        <div class="crud__operation find__operation">
+          <p>F</p>
+          <p>Find</p>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
